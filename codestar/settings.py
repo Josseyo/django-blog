@@ -31,7 +31,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "8000-josseyo-djangoblog-wh14imzy6ov.ws.codeinstitute-ide.net",
-    "blogga-1c74101097cb.herokuapp.com/"]
+    "blogga-1c74101097cb.herokuapp.com"]
 
 # Application definition
 
