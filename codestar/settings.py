@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+import sys
+from django.contrib.messages import constants as messages
 import dj_database_url
 if os.path.isfile('env.py'):
     import env
@@ -24,15 +26,14 @@ TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "8000-josseyo-djangoblog-wh14imzy6ov.ws.codeinstitute-ide.net",
-    "blogga-1c74101097cb.herokuapp.com",
-    'codeanyapp.com', '.herokuapp.com']
+    '8000-nielmc-django-blog-tbkovgv7j0.us2.codeanyapp.com', '.herokuapp.com', '8000-josseyo-djangoblog-wh14imzy6ov.ws.codeinstitute-ide.net',]
+
 
 # Application definition
 
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'cloudinary_storage',
     'django.contrib.sites',
     'allauth',
     'allauth.account',
@@ -50,6 +52,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
     'django_summernote',
+    'cloudinary',
     'blog',
     'about',
 ]
@@ -97,26 +100,28 @@ WSGI_APPLICATION = 'codestar.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': BASE_DIR / 'db.sqlite3',
-#    }
-#}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 DATABASES = {
     'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
 }
 
-# Password validation
-# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
+if 'test' in sys.argv:
+    DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
 
 
 CSRF_TRUSTED_ORIGINS = [
     "https://*.codeanyapp.com",
-    "https://*.herokuapp.com",
-    "https://*8000-josseyo-djangoblog-wh14imzy6ov.ws.codeinstitute-ide.net"
+    "https://*.herokuapp.com"
 ]
+
+# Password validation
+# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -146,13 +151,18 @@ USE_I18N = True
 
 USE_TZ = True
 
+MESSAGE_TAGS = {
+    messages.SUCCESS: 'alert-success',
+    messages.ERROR: 'alert-danger',
+}
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static') ]
-STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
